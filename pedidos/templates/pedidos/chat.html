@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pastelería Bot 🍰</title>
+
+    <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+
+    <link rel="stylesheet" href="{% static 'pedidos/style.css' %}">
+</head>
+
+<body>
+
+    <div class="chat-container">
+        <div class="header">🎂 Asistente Virtual</div>
+
+        <div style="text-align: center; font-size: 0.8em; color: #666; padding: 5px;">
+            <py-script>print("Sistema cargado")</py-script>
+        </div>
+
+        <div class="chat-box" id="chat-box">
+            <div class="message bot">¡Hola! Soy tu asistente pastelero. 🤖<br>¿Qué torta te gustaría cotizar hoy?</div>
+        </div>
+        <div class="typing" id="typing-indicator">Escribiendo...</div>
+
+        <div class="input-area">
+            <input type="text" id="user-input" placeholder="Ej: Torta de mil hojas..." autocomplete="off"
+                onkeypress="handleEnter(event)">
+            <button onclick="enviarMensaje()">Enviar</button>
+        </div>
+    </div>
+
+    <script src="{% static 'pedidos/chat.js' %}"></script>
+
+</body>
+
+</html>
