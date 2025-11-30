@@ -51,26 +51,27 @@ def chat_api(request):
 
             # CASO FINAL: Tenemos TODOS los datos
             elif sabor and cantidad and fecha and tematica:
-                # Precio base + extra si es temática compleja (lógica simple para MVP)
+                # Precio base + extra
                 precio = 10000 + (cantidad * 1500)
+                # Se limpia el mensaje por Bug con la palabra 'si' y el si de ClaSICA
+                msg = mensaje_usuario.lower().strip()
+                # Listado de palabras que entraran como confirmación
+                palabras_si = ['si', 'sí', 'confirmo', 'ok',
+                               'dale', 'bueno', 'correcto', 'confirmar']
 
-                # Confirmación
-                if 'si' in mensaje_usuario.lower() or 'confirmo' in mensaje_usuario.lower():
+                # A) El usuario CONFIRMA
+                if msg in palabras_si or msg.startswith('si ') or msg.startswith('si '):
+                    # ... (Tu lógica de guardado en BD igual que antes) ...
 
-                    # --- GUARDAR EN BD ---
                     cliente_obj, _ = Cliente.objects.get_or_create(
                         nombre="Usuario Web")
-
-                    # Guardamos o buscamos el producto
                     producto_obj, _ = Producto.objects.get_or_create(
-                        nombre=sabor, defaults={'precio': 10000}
-                    )
+                        nombre=sabor, defaults={'precio': 10000})
 
                     nuevo_pedido = Pedido.objects.create(
                         cliente=cliente_obj,
                         estado='RECIBIDO',
                         total=precio,
-                        # AQUÍ GUARDAMOS LOS NUEVOS DATOS
                         fecha_entrega=fecha,
                         tematica=tematica
                     )
@@ -89,13 +90,18 @@ def chat_api(request):
                     respuesta_texto = random.choice(respuestas_exito)
                     request.session.flush()
 
+                # B) El usuario RECHAZA / CANCELA (NUEVO CÓDIGO AQUÍ)
+                elif msg in ['no', 'cancelar', 'cancela', 'nopo'] or msg.startswith('no '):
+                    respuesta_texto = "Entendido, pedido cancelado. 🗑️ Si cambias de opinión aquí estaré. ¡Adiós! 👋"
+                    request.session.flush()
+
+                # C) Aún no confirma ni rechaza explícitamente
                 else:
-                    # Resumen antes de confirmar
                     respuesta_texto = (
                         f"Perfecto, revisemos: Torta de 🍰 **{sabor}** con diseño de 🎨 **{tematica}**.\n"
                         f"Sería para el 📅 **{fecha}** y calculo unas 👥 **{cantidad} personas**.\n"
                         f"El valor aproximado es 💰 **${precio:,}**.\n"
-                        "¿Te parece bien para confirmar?"
+                        "¿Te parece bien para confirmar? (Responde Sí o No)"
                     )
 
             # CASOS FALTANTES (Preguntas Naturales)
