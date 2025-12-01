@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -121,3 +122,16 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Candy Admin",
+    "site_header": "Candy Pastelería",
+    "site_brand": "Candy Admin",
+    "welcome_sign": "Bienvenida al Panel de Control",
+    "copyright": "Candy Cakes Ltd",
+    "search_model": "pedidos.Pedido",
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "theme": "flatly",
+}

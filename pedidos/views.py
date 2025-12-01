@@ -7,7 +7,11 @@ from .wit_client import consultar_wit
 from .models import Cliente, Pedido, DetallePedido, Producto
 
 
-def index(request):
+def home(request):
+    return render(request, 'pedidos/landing.html')
+
+
+def chat_view(request):
     request.session.flush()
     return render(request, 'pedidos/chat.html')
 

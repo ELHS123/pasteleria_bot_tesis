@@ -1,19 +1,54 @@
+/* Heredamos la fuente, pero aseguramos la estructura */
 body {
-    font-family: 'Segoe UI', sans-serif;
-    background-color: #ffe6f2;
+    background-color: #f9f9f9;
     margin: 0;
+    /* ESTO ES LO IMPORTANTE: */
     display: flex;
-    justify-content: center;
+    /* Activamos el modo flexible */
+    flex-direction: column;
+    /* Obligamos a que los elementos vayan uno debajo del otro */
     height: 100vh;
+    /* Altura completa de la pantalla */
+    width: 100%;
+    /* Ancho completo */
 }
 
+/* Aseguramos que la barra ocupe todo el ancho y no se deforme */
+.navbar {
+    width: 100%;
+    flex-shrink: 0;
+    /* Evita que la barra se encoja */
+    /* Los estilos visuales (colores) vienen de landing.css, aquí solo controlamos la posición */
+}
+
+/* El contenedor del chat ocupa todo el espacio sobrante abajo */
+.main-content {
+    flex-grow: 1;
+    /* Ocupa todo el espacio disponible debajo de la barra */
+    display: flex;
+    justify-content: center;
+    /* Centrado Horizontal */
+    align-items: center;
+    /* Centrado Vertical */
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    /* Para que el padding no rompa el ancho */
+}
+
+/* --- ESTILOS DEL CHAT (Igual que antes) --- */
 .chat-container {
     width: 100%;
     max-width: 500px;
     background: white;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    overflow: hidden;
+    height: 80vh;
+    /* Altura del chat */
+    max-height: 700px;
 }
 
 .header {
@@ -100,4 +135,6 @@ button:hover {
     font-size: 0.8rem;
     margin-left: 20px;
     display: none;
+    padding-bottom: 10px;
+    background-color: #fff0f5;
 }
