@@ -1,140 +1,227 @@
-/* Heredamos la fuente, pero aseguramos la estructura */
+/* --- VARIABLES DE COLOR (Coherencia con Landing) --- */
+:root {
+    --smoky-rose: #8B575C;
+    /* Color Principal */
+    --dusty-rose: #C98986;
+    --soft-blossom: #F6BDD1;
+    --white-smoke: #F4F4F4;
+    /* Fondo */
+    --white: #ffffff;
+    --text-dark: #333333;
+}
+
+/* --- ESTRUCTURA GENERAL --- */
 body {
-    background-color: #f9f9f9;
+    background-color: var(--white-smoke);
+    font-family: 'Lato', sans-serif;
     margin: 0;
-    /* ESTO ES LO IMPORTANTE: */
+    padding: 0;
     display: flex;
-    /* Activamos el modo flexible */
     flex-direction: column;
-    /* Obligamos a que los elementos vayan uno debajo del otro */
     height: 100vh;
-    /* Altura completa de la pantalla */
     width: 100%;
-    /* Ancho completo */
 }
 
-/* Aseguramos que la barra ocupe todo el ancho y no se deforme */
+/* --- NAVBAR (Copia exacta de la Landing para continuidad) --- */
 .navbar {
-    width: 100%;
     flex-shrink: 0;
-    /* Evita que la barra se encoja */
-    /* Los estilos visuales (colores) vienen de landing.css, aquí solo controlamos la posición */
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: rgba(255, 255, 255, 0.98);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 5%;
+    box-shadow: 0 4px 20px rgba(139, 87, 92, 0.1);
 }
 
-/* El contenedor del chat ocupa todo el espacio sobrante abajo */
+.logo {
+    font-family: 'Great Vibes', cursive;
+    font-size: 2rem;
+    color: var(--smoky-rose);
+    line-height: 0.8;
+}
+
+.logo-subtitle {
+    font-family: 'Lato', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--dusty-rose);
+    margin-left: 5px;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #666;
+    font-weight: 600;
+    transition: 0.3s;
+    font-size: 0.95rem;
+}
+
+.nav-links a.active,
+.nav-links a:hover {
+    color: var(--smoky-rose);
+}
+
+.btn-admin {
+    color: var(--dusty-rose);
+    border: 1px solid var(--dusty-rose);
+    padding: 5px 10px;
+    border-radius: 50%;
+}
+
+.btn-admin:hover {
+    background-color: var(--dusty-rose);
+    color: var(--white);
+}
+
+/* --- CONTENEDOR DEL CHAT --- */
 .main-content {
     flex-grow: 1;
-    /* Ocupa todo el espacio disponible debajo de la barra */
     display: flex;
     justify-content: center;
-    /* Centrado Horizontal */
     align-items: center;
-    /* Centrado Vertical */
-    width: 100%;
     padding: 20px;
-    box-sizing: border-box;
-    /* Para que el padding no rompa el ancho */
+    background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
+    /* Textura sutil opcional */
 }
 
-/* --- ESTILOS DEL CHAT (Igual que antes) --- */
 .chat-container {
     width: 100%;
     max-width: 500px;
-    background: white;
+    background: var(--white);
     display: flex;
     flex-direction: column;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 15px 40px rgba(139, 87, 92, 0.2);
+    /* Sombra elegante */
     border-radius: 20px;
     overflow: hidden;
-    height: 80vh;
-    /* Altura del chat */
-    max-height: 700px;
+    height: 85vh;
+    max-height: 750px;
+    border: 1px solid rgba(139, 87, 92, 0.1);
 }
 
+/* Cabecera del Chat */
 .header {
-    background-color: #ff66b2;
-    color: white;
-    padding: 20px;
+    background-color: var(--smoky-rose);
+    color: var(--white);
+    padding: 18px;
     text-align: center;
-    font-size: 1.2rem;
-    font-weight: bold;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-bottom: 3px solid var(--dusty-rose);
 }
 
+/* Área de Mensajes */
 .chat-box {
     flex: 1;
-    padding: 20px;
+    padding: 25px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
     gap: 15px;
-    background-color: #fff0f5;
+    background-color: var(--white);
 }
 
+/* Burbujas */
 .message {
     padding: 12px 18px;
-    border-radius: 20px;
+    border-radius: 18px;
     max-width: 80%;
-    line-height: 1.4;
+    line-height: 1.5;
     font-size: 0.95rem;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    position: relative;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 .bot {
-    background-color: #ffffff;
+    background-color: #f2f2f2;
     align-self: flex-start;
-    border-bottom-left-radius: 2px;
-    border: 1px solid #eee;
+    border-bottom-left-radius: 4px;
+    color: #444;
 }
 
 .user {
-    background-color: #ff66b2;
-    color: white;
+    background-color: var(--smoky-rose);
+    /* El color elegante */
+    color: var(--white);
     align-self: flex-end;
-    border-bottom-right-radius: 2px;
+    border-bottom-right-radius: 4px;
 }
 
+/* Input Area */
 .input-area {
-    padding: 20px;
-    background: white;
+    padding: 15px 20px;
+    background: var(--white);
     border-top: 1px solid #eee;
     display: flex;
-    gap: 10px;
+    gap: 12px;
 }
 
 input {
     flex: 1;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 25px;
+    padding: 12px 20px;
+    border: 2px solid #eee;
+    border-radius: 30px;
     outline: none;
     transition: border 0.3s;
+    font-size: 0.95rem;
+    color: #333;
 }
 
 input:focus {
-    border-color: #ff66b2;
+    border-color: var(--dusty-rose);
 }
 
 button {
-    background-color: #ff66b2;
-    color: white;
+    background-color: var(--smoky-rose);
+    color: var(--white);
     border: none;
-    padding: 10px 25px;
-    border-radius: 25px;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    /* Botón redondo */
     cursor: pointer;
-    font-weight: bold;
-    transition: background 0.3s;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 button:hover {
-    background-color: #e60073;
+    background-color: #6d4246;
+    transform: scale(1.1);
 }
 
 .typing {
     font-style: italic;
-    color: #888;
+    color: #aaa;
     font-size: 0.8rem;
     margin-left: 20px;
-    display: none;
     padding-bottom: 10px;
-    background-color: #fff0f5;
+    display: none;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .chat-container {
+        height: 90vh;
+        width: 100%;
+        border-radius: 0;
+    }
+
+    .main-content {
+        padding: 0;
+        align-items: flex-end;
+    }
 }

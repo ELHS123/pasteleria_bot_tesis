@@ -6,7 +6,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CANDY Fondant & Cakes</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Lato:wght@300;400;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="{% static 'pedidos/landing.css' %}">
 </head>
@@ -15,79 +16,98 @@
 
     <nav class="navbar">
         <div class="logo">
-            <i class="fas fa-birthday-cake"></i> CANDY fondant & cakes
+            CANDY <span class="logo-subtitle">fondant & cakes</span>
         </div>
         <div class="nav-links">
-            <a href="#" style="font-weight: bold;">Inicio</a>
-
-            <a href="{% url 'chat' %}">Torta Personalizada</a>
-
-            <a href="/admin/" target="_blank"
-                style="color: #ff66b2; border: 1px solid #ff66b2; padding: 5px 15px; border-radius: 15px; margin-left: 15px; text-decoration: none;">
-                <i class="fas fa-user-cog"></i> Soy la Dueña
+            <a href="#" class="nav-item active">Inicio</a>
+            <a href="#galeria" class="nav-item">Galería</a>
+            <a href="{% url 'chat' %}" class="btn-cotizar">
+                <i class="fas fa-robot"></i> Cotizar Torta
             </a>
-        </div>
+            <a href="/admin/" target="_blank" class="btn-admin" title="Panel de Administración">
+                <i class="fas fa-user-lock"></i>
+            </a>
         </div>
     </nav>
 
-    <header class="hero">
+    <header class="hero"
+        style="background-image: url('https://images.unsplash.com/photo-1535254973040-607b474cb50d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');">
+        <div class="hero-overlay"></div>
         <div class="hero-content">
-            <h1>Candy <br> <span class="highlight">Pastelería</span></h1>
-            <p>Creamos tortas personalizadas para tus momentos especiales. Cada pastel es una obra de arte hecha con
-                amor y dedicación.</p>
+            <p class="tagline">REPOSTERÍA DE DISEÑO</p>
+            <h1>Creamos dulces recuerdos <br> para tus momentos únicos</h1>
+            <p class="description">Expertos en fondant y diseños personalizados. Deja que nuestra Inteligencia
+                Artificial te ayude a crear la torta perfecta.</p>
+
             <div class="hero-buttons">
-                <a href="{% url 'chat' %}" class="btn btn-primary">Pedir Torta Personalizada</a>
+                <a href="{% url 'chat' %}" class="btn btn-primary">Diseñar mi Torta Ahora</a>
+                <a href="#servicios" class="btn btn-outline">Nuestros Servicios</a>
             </div>
-        </div>
-        <div class="hero-image">
-            <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-                alt="Torta Candy">
         </div>
     </header>
 
-    <section class="services">
-        <h2>Nuestros Servicios</h2>
-        <p class="subtitle">Ofrecemos una variedad de opciones para hacer realidad tus sueños más dulces</p>
-
+    <section id="servicios" class="services">
         <div class="cards-container">
             <div class="card">
-                <div class="icon-box"><i class="fas fa-magic"></i></div>
-                <h3>Tortas Personalizadas</h3>
-                <p>Diseños únicos creados exclusivamente para tu celebración.</p>
+                <div class="icon-box"><i class="fas fa-birthday-cake"></i></div>
+                <h3>Diseño Exclusivo</h3>
+                <p>Cada pastel es una obra de arte única hecha a tu medida.</p>
             </div>
-
             <div class="card">
-                <div class="icon-box"><i class="far fa-comments"></i></div>
-                <h3>Asesoría con IA</h3>
-                <p>Nuestro asistente virtual te ayuda a cotizar en segundos.</p>
+                <div class="icon-box"><i class="fas fa-mobile-alt"></i></div>
+                <h3>Cotización IA</h3>
+                <p>Presupuesto inmediato a través de nuestro asistente virtual.</p>
             </div>
-
             <div class="card">
                 <div class="icon-box"><i class="fas fa-truck"></i></div>
                 <h3>Despacho Seguro</h3>
-                <p>Coordinamos la entrega para que tu torta llegue perfecta.</p>
+                <p>Coordinamos la entrega para que llegue perfecta a tu evento.</p>
             </div>
         </div>
     </section>
 
-    <section class="cta-banner">
-        <div class="cta-content">
-            <h2>¿Listo para crear tu torta perfecta?</h2>
-            <p>Nuestro chatbot te ayudará a diseñar la torta ideal para tu evento especial.</p>
-            <a href="{% url 'chat' %}" class="btn btn-warning">Comenzar Ahora</a>
+    <section id="galeria" class="gallery-section">
+        <div class="section-header">
+            <h2>Nuestro Trabajo Real</h2>
+            <p class="subtitle">La calidad que nos define</p>
+        </div>
+
+        <div class="gallery-grid">
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1535141192574-5d4897c12636?auto=format&fit=crop&w=600&q=80"
+                    alt="Torta Boda">
+                <div class="overlay"><span>Bodas</span></div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?auto=format&fit=crop&w=600&q=80"
+                    alt="Torta Chocolate">
+                <div class="overlay"><span>Chocolate</span></div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1627834377411-8da5f4f09de8?auto=format&fit=crop&w=600&q=80"
+                    alt="Torta Infantil">
+                <div class="overlay"><span>Infantil</span></div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1563729768-8f23a3c70606?auto=format&fit=crop&w=600&q=80"
+                    alt="Torta Frutos">
+                <div class="overlay"><span>Frutos Rojos</span></div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&w=600&q=80"
+                    alt="Cupcakes">
+                <div class="overlay"><span>Cupcakes</span></div>
+            </div>
         </div>
     </section>
 
     <footer>
-        <div class="footer-info">
-            <div>
-                <strong>CANDY</strong><br>fondant & cakes
-            </div>
-            <div>
-                <strong>Redes sociales</strong><br>@candypasteleria
-            </div>
-            <div>
-                <strong>Contacto</strong><br>+56 9 1234 5678
+        <div class="footer-content">
+            <p>&copy; 2025 Candy Fondant & Cakes</p>
+            <div class="socials">
+                <a href="https://www.instagram.com/candy_fondant_y_cakes/"><i class="fab fa-instagram"></i></a>
+                <a href="https://api.whatsapp.com/message/BN6ZLIXAYTFFM1?autoload=1&app_absent=0&utm_source=ig"><i
+                        class="fab fa-whatsapp"></i></a>
             </div>
         </div>
     </footer>

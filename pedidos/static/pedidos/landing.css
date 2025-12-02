@@ -1,275 +1,338 @@
-/* RESET & FUENTES */
+/* --- 1. PALETA DE COLORES EXACTA --- */
+:root {
+    --smoky-rose: #8B575C;
+    --dusty-rose: #C98986;
+    --soft-blossom: #F6BDD1;
+    --lavender-veil: #F6E4F6;
+    --white-smoke: #F4F4F4;
+    --white: #ffffff;
+    --text-dark: #333333;
+}
+
+/* --- 2. BASE --- */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
 }
 
 body {
-    background-color: #f9f9f9;
-    color: #333;
+    font-family: 'Lato', sans-serif;
+    background-color: var(--white-smoke);
+    color: var(--text-dark);
 }
 
-/* NAVBAR */
+/* --- 3. NAVBAR STICKY --- */
 .navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: rgba(255, 255, 255, 0.98);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.5rem 5%;
-    background: white;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    padding: 15px 5%;
+    box-shadow: 0 4px 20px rgba(139, 87, 92, 0.1);
+    /* Sombra Smoky Rose suave */
 }
 
 .logo {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: #333;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    font-family: 'Great Vibes', cursive;
+    font-size: 2.2rem;
+    color: var(--smoky-rose);
+    line-height: 0.8;
 }
 
-.nav-links a {
+.logo-subtitle {
+    font-family: 'Lato', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--dusty-rose);
+    display: block;
+    margin-left: 5px;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.nav-item {
     text-decoration: none;
-    color: #555;
-    margin-left: 2rem;
-    font-weight: 500;
+    color: #666;
+    font-weight: 600;
     transition: 0.3s;
 }
 
-.nav-links a:hover,
-.nav-links a.active {
-    color: #ff66b2;
+.nav-item:hover,
+.nav-item.active {
+    color: var(--smoky-rose);
 }
 
-.nav-links .active {
-    background-color: #ff66b2;
+/* Botón Cotizar (Estilo especial) */
+.btn-cotizar {
+    background-color: var(--smoky-rose);
+    color: var(--white) !important;
+    padding: 10px 20px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 700;
+    transition: transform 0.2s;
+    box-shadow: 0 4px 15px rgba(139, 87, 92, 0.3);
+}
+
+.btn-cotizar:hover {
+    transform: translateY(-2px);
+    background-color: #7a4b50;
+}
+
+.btn-admin {
+    color: var(--dusty-rose);
+    border: 1px solid var(--dusty-rose);
+    padding: 5px 10px;
+    border-radius: 50%;
+    transition: 0.3s;
+}
+
+.btn-admin:hover {
+    background-color: var(--dusty-rose);
     color: white;
-    padding: 8px 20px;
-    border-radius: 20px;
 }
 
-/* HERO SECTION */
+/* --- 4. HERO SECTION (Fondo Torta) --- */
 .hero {
+    /* IMAGEN DE FONDO */
+    background-image: url('https://images.unsplash.com/photo-1626803775151-61d756612fcd?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
+    background-size: cover;
+    background-position: center;
+    height: 90vh;
+    /* Altura impactante */
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 4rem 5%;
-    background: #fff;
-    min-height: 80vh;
+    justify-content: center;
+    position: relative;
+    color: var(--white);
+    text-align: center;
+}
+
+/* Filtro oscuro elegante */
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.35);
+    /* Oscurece un 35% */
 }
 
 .hero-content {
-    flex: 1;
-    max-width: 600px;
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    padding: 0 20px;
+}
+
+.tagline {
+    font-size: 1rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--soft-blossom);
+    font-weight: 700;
+    margin-bottom: 10px;
+    display: block;
 }
 
 .hero h1 {
-    font-size: 3.5rem;
-    line-height: 1.1;
-    margin-bottom: 1.5rem;
-    color: #333;
+    font-family: 'Great Vibes', cursive;
+    font-size: 5rem;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
 }
 
-.hero h1 .highlight {
-    color: #fff;
-    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-    /* Efecto outline simple */
-    color: white;
-    font-weight: 800;
-}
-
-.hero p {
-    color: #666;
-    font-size: 1.1rem;
-    margin-bottom: 2rem;
-    line-height: 1.6;
+.description {
+    font-size: 1.2rem;
+    margin-bottom: 40px;
+    font-weight: 300;
 }
 
 .hero-buttons {
     display: flex;
-    gap: 15px;
+    justify-content: center;
+    gap: 20px;
 }
 
 .btn {
-    padding: 12px 30px;
-    border-radius: 30px;
+    padding: 15px 35px;
+    border-radius: 50px;
     text-decoration: none;
-    font-weight: 600;
-    transition: transform 0.2s;
-}
-
-.btn:hover {
-    transform: translateY(-3px);
+    font-weight: 700;
+    transition: 0.3s;
 }
 
 .btn-primary {
-    background-color: #ff66b2;
-    color: white;
-    box-shadow: 0 4px 15px rgba(255, 102, 178, 0.4);
+    background-color: var(--smoky-rose);
+    color: var(--white);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
 }
 
-.btn-secondary {
-    background-color: white;
-    color: #333;
-    border: 1px solid #ddd;
+.btn-primary:hover {
+    background-color: var(--white);
+    color: var(--smoky-rose);
 }
 
-.btn-warning {
-    background-color: #fddb92;
-    color: #333;
-    box-shadow: 0 4px 15px rgba(253, 219, 146, 0.5);
+.btn-outline {
+    border: 2px solid var(--white);
+    color: var(--white);
 }
 
-.hero-image {
-    flex: 1;
-    display: flex;
-    justify-content: flex-end;
+.btn-outline:hover {
+    background-color: var(--white);
+    color: var(--text-dark);
 }
 
-.hero-image img {
-    width: 100%;
-    max-width: 500px;
-    border-radius: 20px;
-    box-shadow: 20px 20px 0px #ffe6f2;
-}
-
-/* SERVICES */
+/* --- 5. SERVICIOS (Tarjetas flotantes) --- */
 .services {
-    text-align: center;
-    padding: 4rem 5%;
-}
-
-.services h2 {
-    font-size: 2.5rem;
-    margin-bottom: 0.5rem;
-}
-
-.subtitle {
-    color: #777;
-    margin-bottom: 3rem;
+    padding: 0 5%;
+    margin-top: -60px;
+    position: relative;
+    z-index: 2;
 }
 
 .cards-container {
     display: flex;
     justify-content: center;
-    gap: 2rem;
+    gap: 30px;
     flex-wrap: wrap;
 }
 
 .card {
-    background: white;
-    padding: 2rem;
-    border-radius: 20px;
-    width: 250px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-    transition: 0.3s;
+    background: var(--white);
+    padding: 40px 30px;
+    width: 300px;
+    text-align: center;
+    border-radius: 15px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s;
+    border-bottom: 5px solid var(--soft-blossom);
 }
 
 .card:hover {
     transform: translateY(-10px);
+    border-color: var(--smoky-rose);
 }
 
 .icon-box {
-    background: #ffe6f2;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 1.5rem auto;
-    color: #ff66b2;
-    font-size: 1.5rem;
+    font-size: 2.5rem;
+    color: var(--dusty-rose);
+    margin-bottom: 20px;
 }
 
 .card h3 {
-    font-size: 1.1rem;
-    margin-bottom: 1rem;
+    color: var(--smoky-rose);
+    margin-bottom: 10px;
+    font-family: 'Montserrat', sans-serif;
 }
 
-.card p {
-    font-size: 0.9rem;
-    color: #777;
-    line-height: 1.5;
-}
-
-/* CTA BANNER (Degradado) */
-.cta-banner {
-    padding: 2rem 5%;
-}
-
-.cta-content {
-    background: linear-gradient(90deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
-    border-radius: 20px;
-    padding: 4rem;
+/* --- 6. GALERÍA --- */
+.gallery-section {
+    padding: 100px 5%;
     text-align: center;
-    color: white;
-    box-shadow: 0 10px 30px rgba(255, 154, 158, 0.3);
 }
 
-.cta-content h2 {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.section-header h2 {
+    font-family: 'Great Vibes', cursive;
+    font-size: 3.5rem;
+    color: var(--smoky-rose);
 }
 
-.cta-content p {
-    margin-bottom: 2rem;
-    font-size: 1.1rem;
-    opacity: 0.9;
+.subtitle {
+    color: #888;
+    margin-bottom: 50px;
 }
 
-/* FOOTER */
-footer {
-    background: #ffe6f2;
-    padding: 2rem 5%;
-    margin-top: 4rem;
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
 }
 
-.footer-info {
+.gallery-item {
+    position: relative;
+    height: 300px;
+    overflow: hidden;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s;
+}
+
+.gallery-item:hover img {
+    transform: scale(1.1);
+}
+
+/* Efecto hover sobre la foto */
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(139, 87, 92, 0.7);
+    /* Smoky Rose transparente */
     display: flex;
-    justify-content: space-between;
-    color: #333;
-    font-size: 0.9rem;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: 0.3s;
+    color: white;
+    font-weight: 700;
+    font-size: 1.5rem;
 }
 
-/* RESPONSIVE */
+.gallery-item:hover .overlay {
+    opacity: 1;
+}
+
+/* --- 7. FOOTER --- */
+footer {
+    background-color: var(--white);
+    border-top: 1px solid #eee;
+    padding: 30px;
+    text-align: center;
+    color: #888;
+}
+
+.socials a {
+    color: var(--dusty-rose);
+    font-size: 1.5rem;
+    margin: 0 10px;
+    transition: 0.3s;
+}
+
+.socials a:hover {
+    color: var(--smoky-rose);
+}
+
+/* --- RESPONSIVE --- */
 @media (max-width: 768px) {
-    .hero {
+    .hero h1 {
+        font-size: 3.5rem;
+    }
+
+    .nav-links a:not(.btn-cotizar) {
+        display: none;
+    }
+
+    /* Ocultar menú en móvil para simplificar */
+    .hero-buttons {
         flex-direction: column;
-        text-align: center;
-    }
-
-    .hero-content {
-        margin-bottom: 2rem;
-    }
-
-    .hero-image {
-        justify-content: center;
-    }
-
-    .navbar {
-        flex-direction: column;
-        gap: 1rem;
-    }
-
-    .nav-links {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        margin-left: 0;
-    }
-
-    .cards-container {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .footer-info {
-        flex-direction: column;
-        gap: 1rem;
-        text-align: center;
     }
 }

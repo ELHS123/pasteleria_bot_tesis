@@ -5,51 +5,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatbot - CANDY</title>
+    <title>Asistente Virtual - CANDY</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Lato:wght@300;400;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
     <script defer src="https://pyscript.net/latest/pyscript.js"></script>
 
-    <link rel="stylesheet" href="{% static 'pedidos/landing.css' %}">
     <link rel="stylesheet" href="{% static 'pedidos/style.css' %}">
 </head>
 
 <body>
 
     <nav class="navbar">
+        <div class="logo">
+            CANDY <span class="logo-subtitle">fondant & cakes</span>
+        </div>
         <div class="nav-links">
             <a href="{% url 'home' %}">Inicio</a>
-
-            <a href="#" style="color: #ff66b2; font-weight: bold; cursor: default;">Asistente Virtual</a>
-
-            <a href="/admin/" target="_blank"
-                style="color: #ff66b2; border: 1px solid #ff66b2; padding: 5px 15px; border-radius: 15px; margin-left: 15px; text-decoration: none;">
-                <i class="fas fa-user-cog"></i> Soy la Dueña
+            <a href="#" class="active">Chatbot IA</a>
+            <a href="/admin/" target="_blank" class="btn-admin" title="Panel Dueña">
+                <i class="fas fa-user-lock"></i>
             </a>
         </div>
     </nav>
 
     <div class="main-content">
         <div class="chat-container">
-            <div class="header">🎂 Asistente Virtual</div>
-
-            <div style="display:none;">
-                <py-script>print("Sistema cargado")</py-script>
+            <div class="header">
+                <i class="fas fa-robot"></i> Asistente Virtual
             </div>
 
+            <div style="display:none;"><py-script>print("Sistema cargado")</py-script></div>
+
             <div class="chat-box" id="chat-box">
-                <div class="message bot">¡Hola! Soy tu asistente pastelero. 🤖<br>¿Qué torta te gustaría cotizar hoy?
+                <div class="message bot">
+                    👋 ¡Hola! Soy tu asistente pastelero. <br>
+                    ¿Qué torta te gustaría diseñar hoy?
                 </div>
             </div>
             <div class="typing" id="typing-indicator">Escribiendo...</div>
 
             <div class="input-area">
-                <input type="text" id="user-input" placeholder="Ej: Torta de mil hojas..." autocomplete="off"
-                    onkeypress="handleEnter(event)">
-                <button onclick="enviarMensaje()">Enviar</button>
+                <input type="text" id="user-input" placeholder="Ej: Torta de mil hojas para 20 personas..."
+                    autocomplete="off" onkeypress="handleEnter(event)">
+                <button onclick="enviarMensaje()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
             </div>
         </div>
     </div>
