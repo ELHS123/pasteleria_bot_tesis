@@ -31,6 +31,14 @@ SECRET_KEY = os.environ.get(
 
 ALLOWED_HOSTS = ['*']
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://localhost:8000',
+    'https://127.0.0.1:8000',
+    'https://*.github.dev',  # Para que funcione en Codespaces
+    'https://*.app.github.dev',
+    'https://pasteleria-bot-tesis.onrender.com', # Para Producción
+]
+
 
 # Application definition
 
@@ -138,7 +146,13 @@ JAZZMIN_SETTINGS = {
     "welcome_sign": "Bienvenida al Panel de Control",
     "copyright": "Candy Cakes Ltd",
     "search_model": "pedidos.Pedido",
-}
+    "topmenu_links": [
+        {"name": "Inicio", "url": "admin:index", "permissions": ["auth.view_user"]},
+        {"name": "Ver Ganancias", "url": "dashboard_admin", "permissions": ["auth.view_user"], "icon": "fas fa-chart-line"},
+    ],
+
+    "show_ui_builder":False,
+    }
 
 JAZZMIN_UI_TWEAKS = {
     "theme": "flatly",

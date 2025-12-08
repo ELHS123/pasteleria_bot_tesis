@@ -1,0 +1,44 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block content %}
+<div style="padding: 30px; font-family: 'Lato', sans-serif;">
+    <h1 style="color: #8B575C; margin-bottom: 30px;">📊 Panel Financiero</h1>
+
+    <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 40px;">
+        <div style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); flex: 1; border-left: 5px solid #C98986;">
+            <h3 style="color: #777; margin-top: 0;">Ventas este Mes</h3>
+            <h2 style="color: #8B575C; font-size: 2.5rem; margin: 10px 0;">${{ ventas_mes|default:"0" }}</h2>
+            <p>{{ cantidad_mes }} pedidos</p>
+        </div>
+
+        <div style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); flex: 1; border-left: 5px solid #8B575C;">
+            <h3 style="color: #777; margin-top: 0;">Ganancia Histórica</h3>
+            <h2 style="color: #2c3e50; font-size: 2.5rem; margin: 10px 0;">${{ ganancia_total|default:"0" }}</h2>
+            <p>{{ total_pedidos }} pedidos totales</p>
+        </div>
+    </div>
+
+    <div style="background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+        <h3 style="color: #555;">Estado de Pedidos</h3>
+        <div style="height: 300px; width: 100%;"><canvas id="estadoChart"></canvas></div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('estadoChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: {{ labels_estados|safe }},
+            datasets: [{
+                data: {{ data_estados|safe }},
+                backgroundColor: ['#8B575C', '#C98986', '#F6BDD1', '#95a5a6'],
+                borderWidth: 0
+            }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+    });
+</script>
+{% endblock %}

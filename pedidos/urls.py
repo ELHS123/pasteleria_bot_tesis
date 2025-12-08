@@ -9,4 +9,8 @@ urlpatterns = [
     
     #http://127.0.0.1:8000/api/chat/
     path('api/chat/', views.chat_api, name='chat_api'),
+
+    path('admin/dashboard/', views.dashboard_admin, name='dashboard_admin'),
+
+
 ]
