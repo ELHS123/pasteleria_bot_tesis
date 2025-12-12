@@ -155,7 +155,7 @@ def chat_api(request):
 def dashboard_admin(request):
     # 1. Datos Generales
     total_pedidos = Pedido.objects.count()
-    ganancia_total = Pedido.objects.aggregate(Sum('total'))['total__sum'] or 0
+    ganancia_total = Pedido.objects.exclude(estado='CANCELADO').aggregate(Sum('total'))['total__sum'] or 0
 
     # 2. Ventas del Mes Actual
     hoy = datetime.date.today()
@@ -164,7 +164,7 @@ def dashboard_admin(request):
         fecha_pedido__month=hoy.month
     )
 
-    ventas_mes = pedidos_mes.exclude('CANCELADO').aggregate(Sum('total'))['total__sum'] or 0
+    ventas_mes = pedidos_mes.exclude(estado='CANCELADO').aggregate(Sum('total'))['total__sum'] or 0
     
     cantidad_mes = pedidos_mes.count()
 
