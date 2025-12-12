@@ -163,7 +163,9 @@ def dashboard_admin(request):
         fecha_pedido__year=hoy.year, 
         fecha_pedido__month=hoy.month
     )
-    ventas_mes = pedidos_mes.aggregate(Sum('total'))['total__sum'] or 0
+
+    ventas_mes = pedidos_mes.exclude('CANCELADO').aggregate(Sum('total'))['total__sum'] or 0
+    
     cantidad_mes = pedidos_mes.count()
 
     # 3. Datos para el Gráfico (Estados)
