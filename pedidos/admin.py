@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import Cliente, Producto, Pedido, DetallePedido
+from django.utils.html import format_html
 
 # Configuración visual para los Pedidos
 class DetallePedidoInline(admin.TabularInline):
