@@ -1,48 +1,63 @@
 from django.contrib import admin
-from .models import Cliente, Producto, Pedido, DetallePedido
 from django.utils.html import format_html
+from .models import Cliente, Producto, Pedido, DetallePedido
 
-# Configuración visual para los Pedidos
+# Configuración visual para ver los productos dentro del pedido
 class DetallePedidoInline(admin.TabularInline):
     model = DetallePedido
-    extra = 0 # No muestra filas vacías extra
-    readonly_fields = ('subtotal',) # Para que no editen precios a mano por error
+    extra = 0
+    readonly_fields = ('subtotal',)
 
 @admin.register(Pedido)
 class PedidoAdmin(admin.ModelAdmin):
-    # 1. COLUMNAS QUE SE VEN EN LA LISTA
-    list_display = ('id', 'nombre_cliente', 'fecha_entrega', 'total_formato', 'estado', 'tematica_corta')
+    # 1. Agregamos 'estado_color' a la lista en lugar de 'estado' normal
+    list_display = ('id', 'nombre_cliente', 'fecha_entrega', 'total_formato', 'estado_color', 'tematica_corta')
     
-    # 2. FILTROS LATERALES (Esto reemplaza el dashboard de "ventas del mes")
+    # 2. Filtros y Búsqueda
     list_filter = ('estado', 'fecha_entrega', 'fecha_pedido')
-    
-    # 3. BARRA DE BÚSQUEDA
     search_fields = ('cliente__nombre', 'cliente__telefono', 'tematica')
-    
-    # 4. ORDENAR (Lo más nuevo primero)
     ordering = ('-fecha_pedido',)
-    
-    # 5. EDITAR EL DETALLE DENTRO DEL PEDIDO
     inlines = [DetallePedidoInline]
 
-    # --- Funciones auxiliares para mostrar datos bonitos ---
-    
+    # --- FUNCIONES VISUALES ---
+
     def nombre_cliente(self, obj):
         return obj.cliente.nombre
     nombre_cliente.short_description = "Cliente"
 
     def total_formato(self, obj):
         return f"${obj.total:,}"
-    total_formato.short_description = "Total a Pagar"
+    total_formato.short_description = "Total"
 
     def tematica_corta(self, obj):
+        # Corta el texto si es muy largo para que no deforme la tabla
         return (obj.tematica[:30] + '...') if len(obj.tematica) > 30 else obj.tematica
     tematica_corta.short_description = "Diseño"
 
+    # --- ETIQUETAS DE COLOR ---
+    def estado_color(self, obj):
+        # Diccionario de colores
+        colores = {
+            'RECIBIDO': 'orange',      # Naranja
+            'PREPARACION': '#17a2b8',  # Azul Claro (Info)
+            'ENTREGADO': '#28a745',    # Verde (Éxito)
+            'CANCELADO': '#dc3545',    # Rojo (Peligro)
+        }
+        color_fondo = colores.get(obj.estado, 'gray') # Gris por defecto
+        
+        # Creamos el HTML de la etiqueta
+        return format_html(
+            '<span style="background-color: {}; color: white; padding: 5px 10px; border-radius: 15px; font-weight: bold; font-size: 12px;">{}</span>',
+            color_fondo,
+            obj.get_estado_display()
+        )
+    estado_color.short_description = "Estado del Pedido"
+
+# Registros simples
 @admin.register(Cliente)
 class ClienteAdmin(admin.ModelAdmin):
     list_display = ('nombre', 'telefono', 'direccion')
-    search_fields = ('nombre', 'telefono')
+    search_fields = ('nombre',)
 
 @admin.register(Producto)
 class ProductoAdmin(admin.ModelAdmin):
