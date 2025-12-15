@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from .models import Cliente, Producto, Pedido, DetallePedido
+from django.urls import reverse  
+
 
 # Configuración visual para ver los productos dentro del pedido
 class DetallePedidoInline(admin.TabularInline):
@@ -11,8 +13,8 @@ class DetallePedidoInline(admin.TabularInline):
 @admin.register(Pedido)
 class PedidoAdmin(admin.ModelAdmin):
     # 1. Agregamos 'estado_color' a la lista en lugar de 'estado' normal
-    list_display = ('id', 'nombre_cliente', 'fecha_entrega', 'total_formato', 'estado_color', 'tematica_corta')
-    
+    list_display = ('id', 'nombre_cliente', 'fecha_entrega', 'total_formato', 'estado_color', 'acciones')
+
     # 2. Filtros y Búsqueda
     list_filter = ('estado', 'fecha_entrega', 'fecha_pedido')
     search_fields = ('cliente__nombre', 'cliente__telefono', 'tematica')
@@ -20,6 +22,13 @@ class PedidoAdmin(admin.ModelAdmin):
     inlines = [DetallePedidoInline]
 
     # --- FUNCIONES VISUALES ---
+    def acciones(self, obj):
+        url = reverse('imprimir_pedido', args=[obj.id])
+        return format_html(
+            '<a class="button" href="{}" target="_blank" style="background-color: #6c757d; color: white; padding: 5px 10px; border-radius: 5px; text-decoration: none;">🖨️ Ver</a>',
+            url
+        )
+    acciones.short_description = "Comprobante"
 
     def nombre_cliente(self, obj):
         return obj.cliente.nombre

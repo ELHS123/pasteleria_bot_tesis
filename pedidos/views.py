@@ -7,7 +7,7 @@ from .wit_client import consultar_wit
 from .models import Cliente, Pedido, DetallePedido, Producto
 from django.db.models import Sum, Count
 from django.contrib.admin.views.decorators import staff_member_required
-
+from django.shortcuts import render, get_object_or_404
 
 
 
@@ -129,7 +129,7 @@ def dashboard_admin(request):
     ganancia_total = Pedido.objects.exclude(estado='CANCELADO').aggregate(Sum('total'))['total__sum'] or 0
 
     # 2. Ventas del Mes Actual
-    hoy = datetime.date.today()
+    hoy = date.today()
     pedidos_mes = Pedido.objects.filter(
         fecha_pedido__year=hoy.year, 
         fecha_pedido__month=hoy.month
@@ -156,3 +156,18 @@ def dashboard_admin(request):
     }
 
     return render(request, 'pedidos/dashboard.html', context)
+
+@staff_member_required
+def comprobante_pedido(request, pedido_id):
+    # Buscamos el pedido (o error 404 si no existe)
+    pedido = get_object_or_404(Pedido, id=pedido_id)
+    
+    # Buscamos los productos de ese pedido
+    detalles = DetallePedido.objects.filter(pedido=pedido)
+    
+    context = {
+        'pedido': pedido,
+        'detalles': detalles,
+        'hoy': date.today()
+    }
+    return render(request, 'pedidos/comprobante.html', context)

@@ -12,5 +12,7 @@ urlpatterns = [
 
     path('admin/dashboard/', views.dashboard_admin, name='dashboard_admin'),
 
+    path('comprobante/pedido/<int:pedido_id>/', views.comprobante_pedido, name='imprimir_pedido'),
 
 ]
+
