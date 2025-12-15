@@ -124,38 +124,42 @@ def chat_api(request):
 
 @staff_member_required
 def dashboard_admin(request):
-    # 1. Datos Generales
-    total_pedidos = Pedido.objects.count()
-    ganancia_total = Pedido.objects.exclude(estado='CANCELADO').aggregate(Sum('total'))['total__sum'] or 0
-
-    # 2. Ventas del Mes Actual
-    hoy = date.today()
-    pedidos_mes = Pedido.objects.filter(
-        fecha_pedido__year=hoy.year, 
-        fecha_pedido__month=hoy.month
-    )
-
-    ventas_mes = pedidos_mes.exclude(estado='CANCELADO').aggregate(Sum('total'))['total__sum'] or 0
+    # 1. Obtener todos los pedidos
+    pedidos = Pedido.objects.all()
     
-    cantidad_mes = pedidos_mes.count()
+    # 2. CALCULAR GANANCIA HISTÓRICA (Suma total)
+    total_ventas = pedidos.filter(estado='ENTREGADO').aggregate(Sum('total'))['total__sum'] or 0
+    
+    # 3. CALCULAR VENTAS DEL MES (Forma segura para Texto)
+    hoy = date.today()
+    mes_iso = hoy.strftime('%Y-%m')   # Busca formato '2025-12' (Chatbot)
+    mes_lat = hoy.strftime('/%m/%Y')  # Busca formato '/12/2025' (Manual)
+    
+    ventas_mes = 0
+    # Recorremos los pedidos entregados y sumamos solo si coinciden con este mes
+    for p in pedidos.filter(estado='ENTREGADO'):
+        fecha_txt = str(p.fecha_entrega) # Nos aseguramos que sea texto
+        if mes_iso in fecha_txt or mes_lat in fecha_txt:
+            ventas_mes += p.total
 
-    # 3. Datos para el Gráfico (Estados)
-    datos_estados = Pedido.objects.values('estado').annotate(dcount=Count('estado'))
-
-    # Listas para Chart.js
-    labels_estados = [item['estado'] for item in datos_estados]
-    data_estados = [item['dcount'] for item in datos_estados]
-
+    # 4. CALCULAR CANTIDADES (Para los Gráficos)
+    c_recibido = pedidos.filter(estado='RECIBIDO').count()
+    c_preparacion = pedidos.filter(estado='EN_PRODUCCION').count()
+    c_listo = pedidos.filter(estado='LISTO').count()
+    c_entregado = pedidos.filter(estado='ENTREGADO').count()
+    c_cancelado = pedidos.filter(estado='CANCELADO').count()
+    
+    # Lista para los gráficos
+    conteo_estados = [c_recibido, c_preparacion, c_listo, c_entregado, c_cancelado]
+    
     context = {
-        'total_pedidos': total_pedidos,
-        'ganancia_total': ganancia_total,
-        'ventas_mes': ventas_mes,
-        'cantidad_mes': cantidad_mes,
-        'labels_estados': labels_estados,
-        'data_estados': data_estados,
+        'total_ventas': total_ventas, 
+        'ventas_mes': ventas_mes,     
+        'conteo_estados': conteo_estados, 
     }
-
+    
     return render(request, 'pedidos/dashboard.html', context)
+
 
 @staff_member_required
 def comprobante_pedido(request, pedido_id):

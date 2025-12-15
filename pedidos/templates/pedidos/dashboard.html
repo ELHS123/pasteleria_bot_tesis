@@ -1,44 +1,232 @@
-{% extends "admin/base_site.html" %}
+{% extends 'admin/base_site.html' %}
 {% load static %}
 
 {% block content %}
-<div style="padding: 30px; font-family: 'Lato', sans-serif;">
-    <h1 style="color: #8B575C; margin-bottom: 30px;">📊 Panel Financiero</h1>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-    <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 40px;">
-        <div style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); flex: 1; border-left: 5px solid #C98986;">
-            <h3 style="color: #777; margin-top: 0;">Ventas este Mes</h3>
-            <h2 style="color: #8B575C; font-size: 2.5rem; margin: 10px 0;">${{ ventas_mes|default:"0" }}</h2>
-            <p>{{ cantidad_mes }} pedidos</p>
+<style>
+    /* --- ESTILOS DE PANTALLA (Lo que ves en la tablet) --- */
+    body { background-color: #F9F5F0; font-family: 'Segoe UI', sans-serif; }
+    .dashboard-container { padding: 30px; max-width: 1400px; margin: 0 auto; }
+    
+    .header-section { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+    .brand-title { font-size: 1.8rem; font-weight: bold; color: #4A3B32; display: flex; align-items: center; gap: 10px; }
+    .brand-subtitle { color: #8D7B6F; font-size: 0.9rem; margin-top: 5px; }
+    
+    .btn-resumen {
+        background-color: #4A3B32; color: white; border: none; padding: 10px 20px;
+        border-radius: 8px; font-size: 0.9rem; cursor: pointer; transition: 0.3s;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .btn-resumen:hover { background-color: #6d584c; }
+
+    /* KPIs */
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 30px; }
+    .kpi-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); border-left: 5px solid #8B4513; }
+    .kpi-label { font-size: 0.75rem; text-transform: uppercase; color: #888; font-weight: bold; }
+    .kpi-value { font-size: 1.8rem; font-weight: bold; color: #333; margin: 5px 0; }
+    .kpi-icon { position: absolute; top: 20px; right: 20px; font-size: 1.5rem; color: #eee; }
+    
+    /* Bordes de color */
+    .border-brown { border-left-color: #5D4037; }
+    .border-green { border-left-color: #28a745; }
+    .border-red   { border-left-color: #dc3545; }
+
+    /* Gráficos */
+    .charts-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
+    .chart-card { background: white; border-radius: 16px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+    .chart-title { font-size: 1.1rem; font-weight: bold; color: #4A3B32; margin-bottom: 15px; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; }
+
+    /* --- OCULTO POR DEFECTO (Solo sale al imprimir) --- */
+    .print-header { display: none; }
+
+    /* ==========================================================================
+       🖨️ ESTILOS DE IMPRESIÓN (MODO REPORTE PROFESIONAL)
+       ========================================================================== */
+    @media print {
+        /* 1. Ocultar interfaz de Django Admin y botones */
+        #header, .breadcrumbs, .main-sidebar, nav, header, .btn-resumen, .messagelist, #user-tools {
+            display: none !important;
+        }
+
+        /* 2. Resetear el lienzo para que sea hoja blanca */
+        body, .content-wrapper, .dashboard-container {
+            background-color: white !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100% !important;
+            font-size: 12pt; /* Tamaño letra documento */
+        }
+
+        /* 3. Mostrar Membrete Oficial */
+        .header-section { display: none; } /* Ocultamos el header web */
+        .print-header {
+            display: block !important;
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #4A3B32;
+        }
+        .print-logo { font-size: 24pt; font-weight: bold; color: #4A3B32; }
+        .print-meta { font-size: 10pt; color: #666; margin-top: 5px; }
+
+        /* 4. Ajustar KPIs para papel (Fila única limpia) */
+        .kpi-grid {
+            grid-template-columns: repeat(4, 1fr) !important;
+            gap: 15px;
+            page-break-inside: avoid;
+        }
+        .kpi-card {
+            box-shadow: none !important;
+            border: 1px solid #ddd !important;
+            border-left-width: 5px !important; /* Mantener color lateral */
+            padding: 15px;
+        }
+        .kpi-value { font-size: 1.4rem; } /* Un poco más chico para papel */
+
+        /* 5. Ajustar Gráficos */
+        .charts-grid {
+            display: block !important; /* Uno debajo del otro para mejor lectura */
+            margin-top: 20px;
+        }
+        .chart-card {
+            box-shadow: none !important;
+            border: 1px solid #eee;
+            margin-bottom: 20px;
+            page-break-inside: avoid; /* Evita que el gráfico se corte a la mitad de la hoja */
+        }
+    }
+</style>
+
+<div class="dashboard-container">
+    
+    <div class="print-header">
+        <div class="print-logo">CANDY FONDANT & CAKES</div>
+        <div class="print-meta">REPORTE FINANCIERO Y OPERATIVO</div>
+        <div class="print-meta">Generado el: <span id="fecha-print"></span></div>
+    </div>
+
+    <div class="header-section">
+        <div>
+            <div class="brand-title">
+                <i class="fas fa-birthday-cake" style="color: #8B4513;"></i> Candy Fondant & Cakes
+            </div>
+            <div class="brand-subtitle">Monitor de Pedidos y Finanzas</div>
+        </div>
+        <button class="btn-resumen" onclick="window.print()">
+            <i class="fas fa-print"></i> Imprimir Reporte Oficial
+        </button>
+    </div>
+
+    <div class="kpi-grid">
+        <div class="kpi-card border-brown">
+            <div class="kpi-label">Ingresos Totales</div>
+            <div class="kpi-value">${{ total_ventas|default:"0" }}</div>
+            <div class="kpi-subtext">Histórico acumulado</div>
+            <i class="fas fa-wallet kpi-icon" style="color:#e0e0e0;"></i>
         </div>
 
-        <div style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); flex: 1; border-left: 5px solid #8B575C;">
-            <h3 style="color: #777; margin-top: 0;">Ganancia Histórica</h3>
-            <h2 style="color: #2c3e50; font-size: 2.5rem; margin: 10px 0;">${{ ganancia_total|default:"0" }}</h2>
-            <p>{{ total_pedidos }} pedidos totales</p>
+        <div class="kpi-card border-brown">
+            <div class="kpi-label">Ventas del Mes</div>
+            <div class="kpi-value">${{ ventas_mes|default:"0" }}</div>
+            <div class="kpi-subtext">Periodo actual</div>
+            <i class="fas fa-calendar-alt kpi-icon" style="color:#e0e0e0;"></i>
+        </div>
+
+        <div class="kpi-card border-green">
+            <div class="kpi-label">Pedidos Vendidos</div>
+            <div class="kpi-value" id="val-vendidos">0</div>
+            <div class="kpi-subtext" style="color: #28a745;">Entregados con éxito</div>
+            <i class="fas fa-check-circle kpi-icon" style="color: #d4edda;"></i>
+        </div>
+
+        <div class="kpi-card border-red">
+            <div class="kpi-label">Cancelados</div>
+            <div class="kpi-value" id="val-cancelados">0</div>
+            <div class="kpi-subtext" style="color: #dc3545;">Pedidos caídos</div>
+            <i class="fas fa-times-circle kpi-icon" style="color: #f8d7da;"></i>
         </div>
     </div>
 
-    <div style="background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
-        <h3 style="color: #555;">Estado de Pedidos</h3>
-        <div style="height: 300px; width: 100%;"><canvas id="estadoChart"></canvas></div>
+    <div class="charts-grid">
+        <div class="chart-card">
+            <div class="chart-title">📊 Tasa de Efectividad</div>
+            <p style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">Comparativa de pedidos completados vs cancelados.</p>
+            <div style="height: 250px; position: relative;">
+                <canvas id="donaChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-card">
+            <div class="chart-title">📈 Flujo Operativo (Funnel)</div>
+            <p style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">Distribución actual de pedidos por etapa de producción.</p>
+            <div style="height: 250px;">
+                <canvas id="barrasChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="print-header" style="border: none; margin-top: 50px; border-top: 1px solid #ddd; padding-top: 10px;">
+        <p style="font-size: 9pt; color: #888;">Documento interno de gestión - Candy Cakes 2025</p>
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const ctx = document.getElementById('estadoChart').getContext('2d');
-    new Chart(ctx, {
+    // --- LÓGICA DE DATOS ---
+    const datosEstados = {{ conteo_estados|safe }};
+    const vendidos = datosEstados[3]; 
+    const cancelados = datosEstados[4]; 
+
+    document.getElementById('val-vendidos').innerText = vendidos;
+    document.getElementById('val-cancelados').innerText = cancelados;
+
+    // Poner fecha de hoy en el reporte impreso
+    const hoy = new Date().toLocaleDateString('es-CL', { year: 'numeric', month: 'long', day: 'numeric' });
+    document.getElementById('fecha-print').innerText = hoy;
+
+    // --- GRÁFICOS ---
+    const ctxDona = document.getElementById('donaChart').getContext('2d');
+    new Chart(ctxDona, {
         type: 'doughnut',
         data: {
-            labels: {{ labels_estados|safe }},
+            labels: ['Completados', 'Cancelados'],
             datasets: [{
-                data: {{ data_estados|safe }},
-                backgroundColor: ['#8B575C', '#C98986', '#F6BDD1', '#95a5a6'],
+                data: [vendidos, cancelados],
+                backgroundColor: ['#28a745', '#dc3545'],
                 borderWidth: 0
             }]
         },
-        options: { responsive: true, maintainAspectRatio: false }
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '65%',
+            plugins: { legend: { position: 'bottom' } }
+        }
+    });
+
+    const ctxBarras = document.getElementById('barrasChart').getContext('2d');
+    new Chart(ctxBarras, {
+        type: 'bar',
+        data: {
+            labels: ["Recibido", "En Producción", "Listo para entrega", "Entregado", "Cancelado"],
+            datasets: [{
+                label: 'Pedidos',
+                data: datosEstados,
+                backgroundColor: ['#FFC107', '#17a2b8', '#6f42c1', '#28a745', '#dc3545'],
+                borderRadius: 4,
+                barThickness: 35
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: { beginAtZero: true, grid: { color: '#f0f0f0' }, ticks: { stepSize: 1 } },
+                x: { grid: { display: false } }
+            },
+            plugins: { legend: { display: false } }
+        }
     });
 </script>
 {% endblock %}
